@@ -401,7 +401,7 @@ class TimingMazeGame:
             move = returned_action
             if self.check_and_apply_move(move):
                 print("Move Accepted! New position", self.cur_pos)
-                self.logger.debug("Received move from {}".format(self.player_name))
+                self.logger.debug(f"Received move {move}, new position: {self.cur_pos}")
                 self.valid_moves += 1
             else:
                 # print("Invalid move as trying to cross some uncrossable boundaries hence cancelled: ", move,
