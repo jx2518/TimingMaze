@@ -25,7 +25,7 @@ maximum_frequency = [
 ]
 
 radii = [5, 20, 40, 150]
-r = 1  
+run = 1  
 t = 3600  
 
 log_dir = 'log'
@@ -66,7 +66,7 @@ for i in range(len(maps)):
                 execution_time = time.time() - s
 
                 if os.path.exists(logP):
-                    r_f = f'run{r}.log'
+                    r_f = f'run{run}.log'
                     with open(logP, 'r') as log:
                         group_log_content = log.read()
                     with open(r_f, 'w') as logf:
@@ -74,15 +74,15 @@ for i in range(len(maps)):
                         logf.write(f"Execution time: {execution_time:.2f} seconds\n")
                         logf.write(group_log_content)
                     os.remove(logP)
-                    r += 1
+                    run += 1
                 else:
                     print(f"{logP} not found after running the command.")
             
             except subprocess.TimeoutExpired:
                 r_f = f'run{r}.log'
                 with open(r_f, 'w') as logf:
-                    logf.write(f"r: {r}, m: {md}, map: {map_path}\n")
+                    logf.write(f"r: {run}, m: {md}, map: {map_path}\n")
                     logf.write("Error: Simulation timed out after 1 hour.\n")
                 
                 print(f"Command timed out: {' '.join(command)}")
-                r += 1
+                run += 1
