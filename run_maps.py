@@ -33,9 +33,6 @@ logP = os.path.join(log_dir, 'Group 1.log')
 if os.path.exists(logP):
     os.remove(logP)
 
-for file in os.listdir('.'):
-    if file.startswith('run') and file.endswith('.log'):
-        os.remove(file)
 
 for i in range(len(maps)):
     map_path = maps[i]
@@ -66,7 +63,7 @@ for i in range(len(maps)):
                 execution_time = time.time() - s
 
                 if os.path.exists(logP):
-                    r_f = f'run{run}.log'
+                    r_f = f'run_map{i}_m{m}_r{r}.log'
                     with open(logP, 'r') as log:
                         group_log_content = log.read()
                     with open(r_f, 'w') as logf:
@@ -79,10 +76,23 @@ for i in range(len(maps)):
                     print(f"{logP} not found after running the command.")
             
             except subprocess.TimeoutExpired:
-                r_f = f'run{r}.log'
-                with open(r_f, 'w') as logf:
-                    logf.write(f"r: {run}, m: {md}, map: {map_path}\n")
-                    logf.write("Error: Simulation timed out after 1 hour.\n")
+                if os.path.exists(logP):
+                    r_f = f'run_map{i}_m{m}_r{r}.log'
+                    with open(logP, 'r') as log:
+                        group_log_content = log.read()
+                    with open(r_f, 'w') as logf:
+                        logf.write(f"r: {r}, m: {md}, map: {map_path}\n")
+                        logf.write(f"Error: Simulation timed out after 5 min.\n")
+                        logf.write(group_log_content)
+                    os.remove(logP)
+                    run += 1
+                else:
+                    print(f"{logP} not found after running the command.")
+            
+                    r_f = f'run_map{i}_m{m}_r{r}.log'
+                    with open(r_f, 'w') as logf:
+                        logf.write(f"r: {run}, m: {md}, map: {map_path}\n")
+                        logf.write("Error: Simulation timed out after 5 min.\n")
                 
                 print(f"Command timed out: {' '.join(command)}")
                 run += 1

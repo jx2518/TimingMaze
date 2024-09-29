@@ -114,8 +114,10 @@ class Player:
                                 return self.experience.move(current_percept)
                         else:
                             return constants.WAIT
-                        
-            self.logger.info(f"Exploring since no path or end not seen")
+                else:
+                    self.logger.info("No path so switch to explore but you saw the end!")
+            self.logger.info(f"Exploring since end not seen")
+            self.clear_path()
             return self.experience.move(current_percept)
 
         except Exception as e:
