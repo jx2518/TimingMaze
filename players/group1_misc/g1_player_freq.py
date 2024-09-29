@@ -93,20 +93,21 @@ class Player:
                     next_move = self.path[0]
                     if self.is_valid_move(cur, next_move):
                         self.logger.info(f"Move valid {next_move} from {cur}")
+                        if next_move == target:
+                            self.logger.info(f"\n\nTurns to reach target: {Player.turn}")
                         return self.get_dir(cur, next_move)
                     else:
                         wait_time = self.find_wait(cur, next_move, Player.turn)
                         self.logger.info(f"Wait time since move {next_move} is {wait_time}")
                         if wait_time > self.maximum_door_frequency:
-                            self.initialize_path(cur,self.end)
+                            self.clear_path()
                             self.path = self.d_star_lite(cur, self.end)
                             self.logger.info(f"Path: {self.path}")
                             if self.path and self.is_valid_move(cur, self.path[0]):
                                 return self.get_dir(cur, self.path[0])
                             else:
                                 self.logger.info(f"No path so exploring as wait {wait_time} is long")
-                                self.path=[]
-                                self.open_list=[]
+                                self.clear_path()
                                 for i in self.get_neighbours(cur):
                                     if self.is_valid_move(cur, i):
                                         return self.get_dir(cur,i)
@@ -116,6 +117,7 @@ class Player:
                             return constants.WAIT
                         
             self.logger.info(f"Exploring since no path or end not seen")
+            self.clear_path()
             return self.experience.move(current_percept)
 
         except Exception as e:
@@ -131,9 +133,16 @@ class Player:
             self.parent = {start: None}
             self.depth = {start: Player.turn}
 
+    def clear_path(self):
+        self.cost.clear()
+        self.open_list.clear()
+        self.path.clear()
+        self.parent.clear()
+        self.depth.clear()
+
     def d_star_lite(self, start, goal):
     # Initialize costs and priority queue if first time or when major recalculation is needed
-        if not self.cost:
+        if not self.path:
             self.initialize_path(start, goal)
 
         #self.logger.info(f"Start {start} Goal {goal}")
@@ -158,6 +167,7 @@ class Player:
         return self.path
 
     def find_full_path(self, start, goal):
+        #self.logger.info(f"Pushing start {(0,start)} in openList {self.open_list}")
         heapq.heappush(self.open_list, (0, start))
         timeout =10000
         while self.open_list and timeout>0:
@@ -165,7 +175,7 @@ class Player:
             current_cost, current = heapq.heappop(self.open_list)
             #print(current,goal)
             if current == goal:
-                self.logger.info(f"Found path in full path")
+                self.logger.info(f"Found path in full d star")
                 break 
 
             # Get neighbours and update costs for all potential paths
@@ -248,7 +258,7 @@ class Player:
         while current != start:
             path.append(current)
             if current not in parent:
-                self.logger.info(f"Current {current} not in parent")
+                self.logger.info(f"Current {current} not in parent {parent} for openList {self.open_list} cost {self.cost}")
                 return []
             current = parent[current]
         path.reverse()
