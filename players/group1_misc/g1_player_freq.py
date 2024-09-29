@@ -119,6 +119,7 @@ class Player:
             return self.experience.move(current_percept)
 
         except Exception as e:
+            self.logger.info(f"Exception {type(e).__name__} {str(e)} at {traceback.format_exception(type(e), e, e.__traceback__)}")
             print(e)
             traceback.print_exc()
 
