@@ -27,7 +27,7 @@ maximum_frequency = [
 
 radii = [5, 20, 40, 150]
 run = 1  
-t = 3600  
+t = 1800  
 
 log_dir = 'log'
 logP = os.path.join(log_dir, 'Group 1.log')
