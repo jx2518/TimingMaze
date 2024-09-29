@@ -12,6 +12,7 @@ maps = [
     "maps/tournament/g7.json",
     "maps/tournament/g9.json",
 ]
+maps = maps[::-1]  # code for running on VM
 
 maximum_frequency = [
     9,
