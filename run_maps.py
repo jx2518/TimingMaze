@@ -12,7 +12,6 @@ maps = [
     "maps/tournament/g7.json",
     "maps/tournament/g9.json",
 ]
-maps = maps[::-1]  # code for running on VM
 
 maximum_frequency = [
     9,
@@ -35,7 +34,7 @@ if os.path.exists(logP):
     os.remove(logP)
 
 
-for i in range(len(maps)):
+for i in range(len(maps) - 1, 0, -1):
     map_path = maps[i]
     mf = maximum_frequency[i]
     m_values = [mf, 2 * mf, 'inf']
