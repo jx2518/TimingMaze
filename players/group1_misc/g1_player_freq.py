@@ -186,7 +186,7 @@ class Player:
                 #self.logger.info(f"Wait for {current} to {(x, y)} is {wait_time} at turn {self.depth[current] + 1}")
                 
                 new_cost = current_cost + wait_time + self.cost_function((x, y), goal)+1
-                if ((x, y) not in self.cost or new_cost < self.cost[(x, y)]) and wait_time < min(self.maximum_door_frequency,100):
+                if (x, y) not in self.cost or new_cost < self.cost[(x, y)]:
                     self.parent[(x, y)] = current
                     self.depth[(x, y)] = self.depth[current] + 1
                     self.cost[(x, y)] = new_cost
@@ -240,7 +240,7 @@ class Player:
                 #self.logger.info(f"Wait for {current} to {(x, y)} is {wait_time} at turn {self.depth[current] + 1}")
 
                 new_cost = current_cost + wait_time + self.cost_function((x, y), goal)+1
-                if ((x, y) not in self.cost or new_cost < self.cost[(x, y)]) and wait_time < min(self.maximum_door_frequency,100):
+                if (x, y) not in self.cost or new_cost < self.cost[(x, y)]:
                     self.parent[(x, y)] = current
                     self.depth[(x, y)] = self.depth[current] + 1
                     self.cost[(x, y)] = new_cost
